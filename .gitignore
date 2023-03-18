@@ -1,6 +1,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/c++,node,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=c++,node,visualstudiocode
 
+### Builds ###
+# Server build
+server/build
+
 ### C++ ###
 # Prerequisites
 *.d
