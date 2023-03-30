@@ -1,13 +1,13 @@
 import { Router } from "express";
 
-import controlsRouter from "./controls";
+import lock from "./lock";
 
 const router = Router();
 
 router.get("/", (req, res) => {
-    res.send("Welcome to the API v1! :)");
+    res.send("🔒 PlzLeaveMeAlone API v1 🔥");
 });
 
-router.use("/controls", controlsRouter);
+router.use("/lock", lock);
 
 export default router;
