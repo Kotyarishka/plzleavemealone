@@ -39,7 +39,7 @@ router.post("/create", (req, res) => {
     }
 
     if (LocksManager.hasLock(lockId)) {
-        res.status(400).send("Lock already exists.");
+        res.status(302).send("Lock already exists.");
         return;
     }
 

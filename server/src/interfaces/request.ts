@@ -1,7 +1,9 @@
 import { Request } from "express";
 
-interface RequestWithLockId extends Request {
+export interface RequestWithLockId extends Request {
     lockId?: string;
 }
 
-export default RequestWithLockId;
+export interface RequestWithAllLocks extends Request {
+    locks?: Array<{ id: string, locked: boolean | undefined }>;
+}

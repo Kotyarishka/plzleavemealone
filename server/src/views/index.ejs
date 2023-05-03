@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlzLeaveMeAlone</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/f8f3944435.js" crossorigin="anonymous"></script>
+    
+    <script src="/js/script.js" defer></script>
+</head>
+<body>
+    <nav class="vertical-nav">
+        <div class="nav-links">
+            <a href="/" data-tooltip="Головна"><i class="fa-solid fa-house"></i></a>
+            <a href="/settings" data-tooltip="Налаштування"><i class="fa-solid fa-cog"></i></a>
+        </div>
+    </nav>
+
+    <main class="content">
+        <div class="container title">
+            <h1>PlzLeaveMeAlone</h1>
+            <p>Ваша персональна система захисту від незапрошених відвідувачів.</p>
+
+            <div class="buttons">
+                <a href="javascript:void()" class="button green"><i class="fa-solid fa-lock-open"></i> Відкрити усі замки</a>
+                <a href="javascript:void()" class="button red"><i class="fa-solid fa-lock"></i> Закрити усі замки</a>
+            </div>
+        </div>
+
+        <div class="container locks">
+            <h2>Активні замки</h2>
+
+            <div class="cards">
+                <!-- Loop throug locks -->
+
+                <% locks.forEach(lock => { %>
+                    <div class="card lock <%= lock.locked ? "closed" : ""%>">
+                        <div class="col lock-name">
+                            <p>
+                                <strong><%= lock.id %></strong>
+                            </p>
+                        </div>
+                        <div class="col lock-status">
+                            <p>
+                                <i class="fa-solid <%= lock.locked ? "fa-lock" : "fa-lock-open"%>"></i> <%= lock.locked ? "Закритий" : "Відкритий"%>
+                            </p>
+                        </div>
+                        <div class="col lock-infos">
+                            <p>
+                                <i class="fa-solid fa-battery-full"></i> 100%
+                            </p>
+                        </div>
+                        <div class="col lock-controls">
+                            <a href="javascript:void()" data-id="<%= lock.id %>" data-action="<%= lock.locked ? "unlock" : "lock" %>" class="button <%= lock.locked ? "green" : "red"%>"><i class="fa-solid <%= lock.locked ? "fa-lock-open" : "fa-lock"%>"></i> <%= lock.locked ? "Відкрити" : "Закрити"%></a>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+
+        <div class="container last-actions">
+            <h2>Останні дії</h2>
+            <div class="cards">
+                <div class="card action">
+                    <p class="action-time">
+                        <i class="fa-solid fa-clock"></i> 12:00
+                    </p>
+
+                    <div class="action-text">
+                        <p>
+                            <strong>Замок 1</strong> був відкритий
+                        </p>
+                    </div>
+                </div>
+                <div class="card action">
+                    <p class="action-time">
+                        <i class="fa-solid fa-clock"></i> 12:00
+                    </p>
+
+                    <div class="action-text">
+                        <p>
+                            <strong>Замок 2</strong> був відкритий
+                        </p>
+                    </div>
+                </div>
+                <div class="card action">
+                    <p class="action-time">
+                        <i class="fa-solid fa-clock"></i> 12:00
+                    </p>
+
+                    <div class="action-text">
+                        <p>
+                            <strong>Замок 2</strong> був закритий
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>Розроблено студентами Державного Університета Телекомунікацій з любовью <i class="fa-solid fa-heart fa-beat-fade" style="color: #fe2a2a;"></i></p>
+    </footer>
+</body>
+</html>
