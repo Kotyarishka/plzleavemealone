@@ -102,6 +102,8 @@ void checkRFID()
   {
     cardTimer = millis() + 100;
     cardOverride = false;
+
+    decoupleId = "";
     return;
   }
 
@@ -109,7 +111,19 @@ void checkRFID()
   {
     cardTimer = millis() + 100;
     cardOverride = false;
+
+    decoupleId = "";
     return;
+  }
+
+  if (decopleId == "")
+  {
+    // generate decoupleId from random string and numbers
+
+    for (int i = 0; i < 10; i++)
+    {
+      decoupleId += String(random(0, 10));
+    }
   }
 
   for (byte i = 0; i < mfrc522.uid.size; i++)

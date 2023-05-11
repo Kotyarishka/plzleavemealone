@@ -73,6 +73,8 @@ router.post("/:lockId/unlock", checkRequestForLockId, (req, res) => {
     res.send("OK");
 });
 
+const lastKnownDecoupleIds: { [lockId: string]: string } = {};
+
 router.post("/:lockId/card", checkRequestForLockId, (req, res) => {
     const { lockId } = req.params;
 
@@ -85,6 +87,22 @@ router.post("/:lockId/card", checkRequestForLockId, (req, res) => {
     }
 
     const [cardId, decoupleId] = body.split(",");
+
+    if (!cardId) {
+        res.status(400).send("Card ID is required.");
+        return;
+    }
+
+    if (!decoupleId) {
+        res.status(400).send("Decouple ID is required.");
+        return;
+    }
+
+    if (lastKnownDecoupleIds[lockId] === decoupleId) {
+        return; // ignore duplicate decouple IDs
+    }
+
+    lastKnownDecoupleIds[lockId] = decoupleId;
     // @TODO: record that lock was unlocked
 });
 
