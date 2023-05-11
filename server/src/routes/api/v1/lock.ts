@@ -73,5 +73,20 @@ router.post("/:lockId/unlock", checkRequestForLockId, (req, res) => {
     res.send("OK");
 });
 
+router.post("/:lockId/card", checkRequestForLockId, (req, res) => {
+    const { lockId } = req.params;
+
+    // body format: cardId,decouoleId
+    const { body } = req;
+
+    if (!body) {
+        res.status(400).send("Body is required.");
+        return;
+    }
+
+    const [cardId, decoupleId] = body.split(",");
+    // @TODO: record that lock was unlocked
+});
+
 
 export default router;
