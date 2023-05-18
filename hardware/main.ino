@@ -51,6 +51,7 @@ void setup()
 
 int requestTimer = millis();
 void makeRequest()
+
 { 
   Serial.println("make request 1");
   if (requestTimer >= millis())
@@ -105,6 +106,7 @@ void checkRFID()
     cardOverride = false;
 
     Serial.println("no new card avaibla");
+    decoupleId = "";
     return;
   }
 
@@ -128,7 +130,6 @@ void checkRFID()
   }
 
   String content;
-
   for (byte i = 0; i < mfrc522.uid.size; i++)
   {
     content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
@@ -159,4 +160,13 @@ void loop()
   checkRFID();
 
   Serial.println(cardOverride);  
+}
+
+void loop()
+{
+  // Make request to server
+  makeRequest();
+
+  // Check RFID
+  checkRFID();
 }
