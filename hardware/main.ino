@@ -11,7 +11,7 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);
 
 #define ssid "225"
 #define password "225225225"
-#define serverAddress "http://192.168.0.149:3000/api/v1"
+#define serverAddress "http://192.168.0.150:3000/api/v1"
 
 #define lockId "lock1"
 
@@ -22,14 +22,12 @@ bool cardOverride = false;
 
 void setup()
 {
-  // Serial.begin(115200);
+  Serial.begin(115200);
 
   SPI.begin();        /*SPI communication initialized*/
   mfrc522.PCD_Init(); /*RFID sensor initialized*/
 
   WiFi.begin(ssid, password, 6);
-
-  ledState = connecting;
 
   while (WiFi.status() != WL_CONNECTED)
   {
@@ -53,11 +51,19 @@ void setup()
 
 int requestTimer = millis();
 void makeRequest()
-{
-  if (requestTimer >= millis() or cardOverride == true)
+
+{ 
+  Serial.println("make request 1");
+  if (requestTimer >= millis())
   {
     return;
   };
+
+  if (cardOverride) {
+    return;
+  };
+  
+  Serial.println("make request 2");
 
   HTTPClient http;
 
@@ -79,10 +85,6 @@ void makeRequest()
       digitalWrite(SOLENOID, LOW);
     }
   }
-  else
-  {
-    ledState = error;
-  }
 
   http.end();
 
@@ -103,6 +105,7 @@ void checkRFID()
     cardTimer = millis() + 100;
     cardOverride = false;
 
+    Serial.println("no new card avaibla");
     decoupleId = "";
     return;
   }
@@ -116,7 +119,7 @@ void checkRFID()
     return;
   }
 
-  if (decopleId == "")
+  if (decoupleId == "")
   {
     // generate decoupleId from random string and numbers
 
@@ -126,6 +129,7 @@ void checkRFID()
     }
   }
 
+  String content;
   for (byte i = 0; i < mfrc522.uid.size; i++)
   {
     content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
@@ -133,16 +137,29 @@ void checkRFID()
   }
 
   content.toUpperCase();
-  if (content.substring(1) == "8B 07 CC 22") /*UID for the Card/Tag we want to give access Replace with your card UID*/
+  Serial.print(content);
+  Serial.println(" rfid");
+    if (content.substring(1) == "8B 07 CC 22") /*UID for the Card/Tag we want to give access Replace with your card UID*/
   {
+    requestTimer = millis() + 5000;
     cardOverride = true;
-    digitalWrite(SOLENOID, HIGHT);
+    
+    digitalWrite(SOLENOID, LOW);
 
-    HTTPClient http;
-    http.begin(wifiClient, serverAddress "/lock/" lockId "/card");
-    http.addHeader("Content-Type", "text/plain");
-    http.POST(content "," decoupleId);
   }
+}
+
+void loop()
+{
+
+
+  // Make request to server
+  makeRequest();
+
+  // Check RFID
+  checkRFID();
+
+  Serial.println(cardOverride);  
 }
 
 void loop()
